@@ -28,11 +28,11 @@ include "LuaRules/Configs/customcmds.h.lua"
 -- Global Variables
 
 local loadSelectedCmd = {
-    id      = CMD_LOADUNITS_SELECTED,
-    name    = "Load Selected",
-    action  = "loadselected",
+	id      = CMD_LOADUNITS_SELECTED,
+	name    = "Load Selected",
+	action  = "loadselected",
 	cursor  = 'LoadUnits',
-    type    = CMDTYPE.ICON,
+	type    = CMDTYPE.ICON,
 	tooltip = "Load selected units.",
 	hidden	= true,
 }
@@ -41,16 +41,20 @@ local loadSelectedCmd = {
 --------------------------------------------------------------------------------
 -- Callins
 
+local spFindUnitCmdDesc = Spring.FindUnitCmdDesc
+local spInsertUnitCmdDesc = Spring.InsertUnitCmdDesc
+local CMD_LOAD_UNITS = CMD.LOAD_UNITS
+
 function gadget:UnitCreated(unitID, unitDefID, team)
-	local cmdDescID = Spring.FindUnitCmdDesc(unitID, CMD.LOAD_UNITS)
-    if cmdDescID then
-		Spring.InsertUnitCmdDesc(unitID, 502, loadSelectedCmd)
-    end
+	local cmdDescID = spFindUnitCmdDesc(unitID, CMD_LOAD_UNITS)
+	if cmdDescID then
+		spInsertUnitCmdDesc(unitID, 502, loadSelectedCmd)
+	end
 end
 
 function gadget:Initialize()
 	gadgetHandler:RegisterCMDID(CMD_LOADUNITS_SELECTED)
-    for _, unitID in ipairs(Spring.GetAllUnits()) do
+	for _, unitID in ipairs(Spring.GetAllUnits()) do
 		gadget:UnitCreated(unitID)
-    end
+	end
 end
