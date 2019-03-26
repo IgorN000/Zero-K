@@ -1,24 +1,7 @@
--- $Id: unit_stealth.lua 3171 2008-11-06 09:06:29Z det $
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
---
---  THIS ISN'T THE ORIGINAL! (it contains a bugfix by jK)
---
---  file:    unit_stealth.lua
---  brief:   adds active unit stealth capability
---  author:  Dave Rodgers (bugfixed by jK)
---
---  Copyright (C) 2007.
---  Licensed under the terms of the GNU GPL, v2 or later.
---
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+
 if not gadgetHandler:IsSyncedCode() then
 	return
 end
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-
 
 function gadget:GetInfo()
   return {
@@ -32,12 +15,15 @@ function gadget:GetInfo()
   }
 end
 
+local spSetUnitStealth = Spring.SetUnitStealth
+local spSetUnitSonarStealth = Spring.SetUnitSonarStealth
+
 function gadget:UnitCloaked(unitID)
-	Spring.SetUnitStealth(unitID, true)
-	Spring.SetUnitSonarStealth(unitID, true)
+	spSetUnitStealth(unitID, true)
+	spSetUnitSonarStealth(unitID, true)
 end
 
 function gadget:UnitDecloaked(unitID)
-	Spring.SetUnitStealth(unitID, false)
-	Spring.SetUnitSonarStealth(unitID, false)
+	spSetUnitStealth(unitID, false)
+	spSetUnitSonarStealth(unitID, false)
 end
