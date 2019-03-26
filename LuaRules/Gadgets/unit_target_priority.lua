@@ -93,15 +93,13 @@ local function GetUnitVisibility(unitID, allyTeam)
 		if not remVisible[allyTeam] then
 			remVisible[allyTeam] = {}
 		end
-		local visibilityTable = spGetUnitLosState(unitID,allyTeam,false)
-		if visibilityTable then
-			if visibilityTable.los then
-				remVisible[allyTeam][unitID] = 2 -- In LoS
-			elseif visibilityTable.typed then
-				remVisible[allyTeam][unitID] = 1 -- Known type
-			else
-				remVisible[allyTeam][unitID] = 0
-			end
+		local visibilityTable = spGetUnitLosState(unitID,allyTeam,true)
+		if not visibilityTable then
+			remVisible[allyTeam][unitID] = 0
+		elseif visibilityTable == 15 then
+			remVisible[allyTeam][unitID] = 2 -- In LoS
+		elseif (visibilityTable / 4) % 4 == 3 then
+			remVisible[allyTeam][unitID] = 1 -- Known type
 		else
 			remVisible[allyTeam][unitID] = 0
 		end
