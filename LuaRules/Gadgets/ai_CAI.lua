@@ -56,6 +56,8 @@ local jumpDefs = VFS.Include"LuaRules/Configs/jump_defs.lua"
 
 local SAVE_FILE = "Gadgets/ai_cai.lua"
 
+local TEAM_CUSTOMKEYS_STACKPOS = Script.IsEngineMinVersion(104, 0, 1166) and 8 or 7
+
 --------------------------------------------------------------------------------
 -- commands
 --------------------------------------------------------------------------------
@@ -4098,7 +4100,7 @@ function gadget:Initialize()
 	for _,team in ipairs(spGetTeamList()) do
 		--local _,_,_,isAI,side = spGetTeamInfo(team)
 		if aiConfigByName[spGetTeamLuaAI(team)] then
-			local _,_,_,_,_,_,CustomTeamOptions = spGetTeamInfo(team)
+			local CustomTeamOptions = select(TEAM_CUSTOMKEYS_STACKPOS, spGetTeamInfo(team))
 			if (not CustomTeamOptions) or (not CustomTeamOptions["aioverride"]) then -- what is this for?
 				local _,_,_,_,_,allyTeam = spGetTeamInfo(team)
 				initialiseAiTeam(team, allyTeam, aiConfigByName[spGetTeamLuaAI(team)])
@@ -4307,7 +4309,7 @@ function gadget:Initialize()
 	for _,team in ipairs(spGetTeamList()) do
 		--local _,_,_,isAI,side = spGetTeamInfo(team)
 		if aiConfigByName[spGetTeamLuaAI(team)] then
-			local _,_,_,_,_,_,CustomTeamOptions = spGetTeamInfo(team)
+			local CustomTeamOptions = select(TEAM_CUSTOMKEYS_STACKPOS, spGetTeamInfo(team))
 			if (not CustomTeamOptions) or (not CustomTeamOptions["aioverride"]) then -- what is this for?
 				usingAI = true
 			end
