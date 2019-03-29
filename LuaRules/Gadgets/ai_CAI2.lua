@@ -107,7 +107,7 @@ function gadget:Initialize()
 	for _,team in ipairs(spGetTeamList()) do
 		--local _,_,_,isAI,side = spGetTeamInfo(team)
 		if aiConfigByName[spGetTeamLuaAI(team)] then
-			local _,_,_,_,_,_,CustomTeamOptions = spGetTeamInfo(team)
+			local CustomTeamOptions = select(Script.IsEngineMinVersion(104, 0, 1166) and 8 or 7, spGetTeamInfo(team))
 			if (not CustomTeamOptions) or (not CustomTeamOptions["aioverride"]) then -- what is this for?
 				local _,_,_,_,_,allyTeam = spGetTeamInfo(team)
 				
