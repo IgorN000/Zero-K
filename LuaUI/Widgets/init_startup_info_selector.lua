@@ -34,6 +34,8 @@ _ Show a windows at game start with pictures to choose commander type.
 local spGetGameRulesParam = Spring.GetGameRulesParam
 local coop = false
 
+local TEAM_CUSTOMKEYS_STACKPOS = Script.IsEngineMinVersion(104, 0, 1166) and 8 or 7
+
 local Chili
 local Window
 local ScrollPanel
@@ -176,7 +178,7 @@ end
 local function GetStartZoomBounds()
 	if fixedStartPos then
 		local teamID = Spring.GetMyTeamID()
-		local teamInfo = teamID and select(7, Spring.GetTeamInfo(teamID))
+		local teamInfo = teamID and select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 		local x, z = tonumber(teamInfo.start_x), tonumber(teamInfo.start_z)
 		if not x then
 			x, _, z = Spring.GetTeamStartPosition(teamID)
@@ -428,7 +430,7 @@ function widget:Initialize()
 	-- nothing serious, just annoying
 	local playerID = Spring.GetMyPlayerID()
 	local teamID = Spring.GetMyTeamID()
-	local teamInfo = teamID and select(7, Spring.GetTeamInfo(teamID))
+	local teamInfo = teamID and select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 	if teamInfo and teamInfo.staticcomm then
 		wantClose = true
 		return
