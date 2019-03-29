@@ -21,6 +21,8 @@ local spGetPlayerInfo 		= Spring.GetPlayerInfo
 local spGetSpectatingState 	= Spring.GetSpectatingState
 local spGetPlayerList		= Spring.GetPlayerList
 
+local TEAM_CUSTOMKEYS_STACKPOS = Script.IsEngineMinVersion(104, 0, 1166) and 8 or 7
+
 local modOptions = Spring.GetModOptions()
 
 local DELAYED_AFK_SPAWN = false
@@ -211,7 +213,7 @@ end
 
 local function GetStartUnit(teamID, playerID, isAI)
 
-	local teamInfo = teamID and select(7, Spring.GetTeamInfo(teamID))
+	local teamInfo = teamID and select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 	if teamInfo and teamInfo.staticcomm then
 		local commanderName = teamInfo.staticcomm
 		local commanderLevel = teamInfo.staticcomm_level or 1
@@ -319,7 +321,8 @@ local function SpawnStartUnit(teamID, playerID, isAI, bonusSpawn, notAtTheStartO
 	if not teamID then
 		return
 	end
-	local _,_,_,_,_,allyTeamID,teamInfo = Spring.GetTeamInfo(teamID)
+	local _,_,_,_,_,allyTeamID,r7,r8 = Spring.GetTeamInfo(teamID)
+	local teamInfo = Script.IsEngineMinVersion(104, 0, 1166) and r8 or r7
 	if teamInfo and teamInfo.nocommander then
 		waitingForComm[teamID] = nil
 		return
