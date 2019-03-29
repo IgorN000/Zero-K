@@ -39,6 +39,7 @@ local SAVE_FILE = "Gadgets/mission_galaxy_campaign_battle.lua"
 local loadGameFrame = 0
 
 local FACING_TO_HEADING = 2^14
+local TEAM_CUSTOMKEYS_STACKPOS = Script.IsEngineMinVersion(104, 0, 1166) and 8 or 7
 
 local mapCenterX = Game.mapSizeX / 2
 local mapCenterZ = Game.mapSizeZ / 2
@@ -1144,7 +1145,7 @@ local function InitializeUnlocks()
 	local teamList = Spring.GetTeamList()
 	for i = 1, #teamList do
 		local teamID = teamList[i]
-		local customKeys = select(7, Spring.GetTeamInfo(teamID))
+		local customKeys = select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 		SetTeamAbilities(teamID, customKeys)
 		SetTeamUnlocks(teamID, customKeys)
 		InitializeCommanderParameters(teamID, customKeys)
@@ -1155,7 +1156,7 @@ local function InitializeTypeVictoryLocation()
 	local teamList = Spring.GetTeamList()
 	for i = 1, #teamList do
 		local teamID = teamList[i]
-		local _,_,_,_,_,allyTeamID, customKeys = Spring.GetTeamInfo(teamID)
+		local customKeys = select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 		InitializeTeamTypeVictoryLocations(teamID, customKeys)
 	end
 end
@@ -1207,7 +1208,7 @@ local function InitializeMidgameUnits(gameFrame)
 	local teamList = Spring.GetTeamList()
 	for i = 1, #teamList do
 		local teamID = teamList[i]
-		local _,_,_,_,_,allyTeamID, customKeys = Spring.GetTeamInfo(teamID)
+		local customKeys = select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 		
 		local midgameUnits = CustomKeyToUsefulTable(customKeys and customKeys.midgameunits)
 		if midgameUnits then
@@ -1222,7 +1223,8 @@ local function DoInitialUnitPlacement()
 	local teamList = Spring.GetTeamList()
 	for i = 1, #teamList do
 		local teamID = teamList[i]
-		local _,_,_,_,_,allyTeamID, customKeys = Spring.GetTeamInfo(teamID)
+		local _,_,_,_,_,allyTeamID, r7, r8 = Spring.GetTeamInfo(teamID)
+		local customKeys = Script.IsEngineMinVersion(104, 0, 1166) and r8 or r7
 		PlaceTeamUnits(teamID, customKeys, allyTeamID == PLAYER_ALLY_TEAM_ID)
 	end
 	
@@ -1250,7 +1252,7 @@ local function DoInitialTerraform(noBuildings)
 		local teamList = Spring.GetTeamList()
 		for i = 1, #teamList do
 			local teamID = teamList[i]
-			local customKeys = select(7, Spring.GetTeamInfo(teamID))
+			local customKeys = select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 			local initialUnits = GetExtraStartUnits(teamID, customKeys)
 			initialUnitDataTable[teamID] = initialUnitDataTable[teamID] or CustomKeyToUsefulTable(customKeys and customKeys.extrastartunits)
 			if initialUnits then
@@ -1332,7 +1334,7 @@ function GalaxyCampaignHandler.GetDefeatConfig(allyTeamID)
 end
 
 function GalaxyCampaignHandler.DeployRetinue(unitID, x, z, facing, teamID)
-	local customKeys = select(7, Spring.GetTeamInfo(teamID))
+	local customKeys = select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 	local retinueData = CustomKeyToUsefulTable(customKeys and customKeys.retinuestartunits)
 	if retinueData then
 		local range = 70 + #retinueData*20
@@ -1344,7 +1346,7 @@ function GalaxyCampaignHandler.DeployRetinue(unitID, x, z, facing, teamID)
 end
 
 function GalaxyCampaignHandler.DeployRetinue(unitID, x, z, facing, teamID)
-	local customKeys = select(7, Spring.GetTeamInfo(teamID))
+	local customKeys = select(TEAM_CUSTOMKEYS_STACKPOS, Spring.GetTeamInfo(teamID))
 	local retinueData = CustomKeyToUsefulTable(customKeys and customKeys.retinuestartunits)
 	if retinueData then
 		local range = 70 + #retinueData*20
